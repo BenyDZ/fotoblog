@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordChangeDoneView
 
 import authentication.views
 import blog.views
@@ -26,7 +26,9 @@ urlpatterns = [
     path('', LoginView.as_view(
             template_name='authentication/login.html',
             redirect_authenticated_user=True),
-        name='login'),  #gere autmatiquement l'autentification grace a un module django, pas besoin de créer de fonction d'autentification
-    path('logout/', authentication.views.logout_user, name='logout'),
+        name='login'),  #display de the login form and handle the login action
+    path('logout/', LogoutView.as_view(), name='logout'), #logout the user, the logout button has to be a form using the post request
     path('home/', blog.views.home, name='home'),
+    path('change_password/', PasswordChangeView.as_view(template_name='authentication/change_password.html'), name='change_password'),
+    path('change_password_done/', PasswordChangeDoneView.as_view(template_name='authentication/password_change_done.html'), name='change_password_done'),
 ]
